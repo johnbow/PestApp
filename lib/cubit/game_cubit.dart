@@ -50,7 +50,6 @@ class GameCubit extends Cubit<GameState> {
   }
 
   void restart() {
-    if (state is! RoundEnded) return;
     emit(RollingOut(players: state.players, dices: const [1]));
   }
 

@@ -23,7 +23,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.dark(
+              brightness: Brightness.light, background: Color(0xFF282828)),
+          textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 18)),
           useMaterial3: true,
         ),
         home: RepositoryProvider<DiceRepository>(
