@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pest/constants/themes.dart';
 import 'package:pest/cubit/game_cubit.dart';
-import 'package:pest/widgets/dice_widget.dart';
+import 'package:pest/widgets/dice_widget_group.dart';
 import 'package:pest/widgets/player_counter.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
+
+  bool _isRoundStartedState(GameState state) {
+    return state is RoundStarted ||
+        state is RoundEnded ||
+        (state is DiceRolling &&
+            (state.nextState is RoundStarted || state.nextState is RoundEnded));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +36,7 @@ class MainPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () => context.read<GameCubit>().rollDices(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          for (final side in state.dices) DiceWidget(side: side)
-                        ],
-                      ),
-                    ),
+                    const DiceWidgetGroup(),
                     Visibility(
                       visible: state is RolledOut,
                       child: ElevatedButton(
@@ -57,17 +55,19 @@ class MainPage extends StatelessWidget {
                   ],
                 ),
               ),
-              if (state is RoundStarted)
+              if (_isRoundStartedState(state))
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Text("${state.round} / ${state.players}"),
+                      child: state is RoundEnded
+                          ? Text("${state.players} / ${state.players}")
+                          : Text("${state.round} / ${state.players}"),
                     ),
                     IconButton(
                         onPressed: () => context.read<GameCubit>().restart(),
-                        icon: Icon(Icons.replay))
+                        icon: const Icon(Icons.replay))
                   ],
                 )
             ],

@@ -6,11 +6,12 @@ part 'game_state.dart';
 
 class GameCubit extends Cubit<GameState> {
   GameCubit({required this.diceRepo})
-      : super(const RollingOut(players: 1, dices: [6]));
+      : super(RollingOut(players: 1, dices: diceRepo.last));
 
   final DiceRepository diceRepo;
 
   void addPlayer() {
+    if (state is DiceRolling) return;
     if (state is RoundEnded) {
       emit(RoundStarted(
           players: state.players + 1,
@@ -23,10 +24,11 @@ class GameCubit extends Cubit<GameState> {
   }
 
   void removePlayer() {
+    if (state is DiceRolling) return;
     if (state.players <= 1) return;
     if (state is RoundStarted) {
       final rs = (state as RoundStarted).copyWith(players: state.players - 1);
-      _checkRoundEnded(rs);
+      emit(_checkRoundEnded(rs));
     } else {
       emit(state.copyWith(players: state.players - 1));
     }
@@ -34,11 +36,14 @@ class GameCubit extends Cubit<GameState> {
 
   void rollDices() async {
     if (state is RollingOut) {
-      final roll = await diceRepo.nextNumber();
-      if (roll == 3) {
-        emit(RolledOut(players: state.players, dices: [roll]));
+      final roll = await diceRepo.getNumbers(1);
+      if (roll[0] == 3) {
+        emit(DiceRolling.fromState(
+            RolledOut(players: state.players, dices: roll),
+            oldRound: state.round));
       } else {
-        emit(state.copyWith(dices: [roll]));
+        emit(DiceRolling.fromState(state.copyWith(dices: roll),
+            oldRound: state.round));
       }
     } else if (state is RoundStarted) {
       final roll = await diceRepo.getNumbers(2);
@@ -47,28 +52,37 @@ class GameCubit extends Cubit<GameState> {
       if (message.isEmpty) {
         rs = rs.copyWith(message: ["Weitergeben"], round: rs.round + 1);
       }
-      _checkRoundEnded(rs);
+      emit(DiceRolling.fromState(_checkRoundEnded(rs), oldRound: state.round));
     }
   }
 
   void startRound() {
     if (state is! RolledOut) return;
+    diceRepo.last = const [6, 6];
     emit(RoundStarted(
         players: state.players,
-        dices: const [6, 6],
+        dices: diceRepo.last,
         message: const ["Linker Nachbar der Pest fängt an"]));
   }
 
-  void restart() {
-    emit(RollingOut(players: state.players, dices: const [1]));
+  void onAnimationFinished() {
+    if (state is! DiceRolling) return;
+    emit((state as DiceRolling).nextState);
   }
 
-  void _checkRoundEnded(RoundStarted newState) {
-    if (newState.round > newState.players) {
-      emit(RoundEnded(players: newState.players, dices: newState.dices));
-    } else {
-      emit(newState);
-    }
+  void restart() {
+    if (state is DiceRolling) return;
+    diceRepo.last = const [1];
+    emit(RollingOut(players: state.players, dices: diceRepo.last));
+  }
+
+  GameState _checkRoundEnded(RoundStarted newState) {
+    return newState.round > newState.players
+        ? RoundEnded(
+            players: newState.players,
+            dices: newState.dices,
+            round: newState.round)
+        : newState;
   }
 
   List<String> _doubleRollMessage(List<int> roll) {
@@ -103,11 +117,5 @@ class GameCubit extends Cubit<GameState> {
     }
 
     return message;
-  }
-
-  @override
-  void onChange(Change<GameState> change) {
-    print("${change.nextState}: ${change.nextState.dices}");
-    super.onChange(change);
   }
 }

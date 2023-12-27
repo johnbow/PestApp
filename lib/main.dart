@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pest/cubit/dice_animation_cubit.dart';
 import 'package:pest/cubit/game_cubit.dart';
 import 'package:pest/pages/main_page.dart';
 import 'package:pest/repositories/dice_repository.dart';
@@ -32,16 +33,24 @@ class MyApp extends StatelessWidget {
         home: MultiRepositoryProvider(
           providers: [
             RepositoryProvider<DiceRepository>(
-              create: (context) => RandomDice(sides: 6),
+              create: (context) => RandomDice(sides: 6, initial: [6]),
             ),
             RepositoryProvider(
               lazy: false,
               create: (context) => DiceImageRepository(sides: 6),
             ),
           ],
-          child: BlocProvider(
-            create: (context) =>
-                GameCubit(diceRepo: context.read<DiceRepository>()),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    GameCubit(diceRepo: context.read<DiceRepository>()),
+              ),
+              BlocProvider(
+                create: (context) => DiceAnimationCubit(
+                    diceRepo: context.read<DiceRepository>()),
+              ),
+            ],
             child: const MainPage(),
           ),
         ));
