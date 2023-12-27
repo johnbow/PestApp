@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pest/repositories/dice_repository.dart';
 
 part 'game_state.dart';
@@ -14,7 +14,12 @@ class GameCubit extends Cubit<GameState> {
 
   void removePlayer() {
     if (state.players <= 1) return;
-    emit(state.copyWith(players: state.players - 1));
+    if (state is RoundStarted) {
+      final rs = (state as RoundStarted).copyWith(players: state.players - 1);
+      _checkRoundEnded(rs);
+    } else {
+      emit(state.copyWith(players: state.players - 1));
+    }
   }
 
   void rollDices() async {
@@ -28,7 +33,11 @@ class GameCubit extends Cubit<GameState> {
     } else if (state is RoundStarted) {
       final roll = await diceRepo.getNumbers(2);
       final message = _doubleRollMessage(roll);
-      emit((state as RoundStarted).copyWith(dices: roll, message: message));
+      var rs = (state as RoundStarted).copyWith(dices: roll, message: message);
+      if (message.isEmpty) {
+        rs = rs.copyWith(message: ["Weitergeben"], round: rs.round + 1);
+      }
+      _checkRoundEnded(rs);
     }
   }
 
@@ -40,16 +49,30 @@ class GameCubit extends Cubit<GameState> {
         message: const ["Linker Nachbar der Pest fängt an"]));
   }
 
+  void restart() {
+    if (state is! RoundEnded) return;
+    emit(RollingOut(players: state.players, dices: const [1]));
+  }
+
+  void _checkRoundEnded(RoundStarted newState) {
+    if (newState.round > newState.players) {
+      emit(RoundEnded(players: newState.players, dices: newState.dices));
+    } else {
+      emit(newState);
+    }
+  }
+
   List<String> _doubleRollMessage(List<int> roll) {
     List<String> message = [];
 
-    if (roll == [3, 1] || roll == [1, 3]) {
+    if (listEquals(roll, [3, 1]) || listEquals(roll, [1, 3])) {
       message.add("Pest muss exen!");
       return message;
     }
 
     if (roll[0] == roll[1]) {
-      message.add("Verteile ${roll[0]} Schlücke!");
+      message
+          .add("Verteile ${roll[0]} ${roll[0] == 1 ? "Schluck" : "Schlücke"}");
     }
 
     final eyesum = roll[0] + roll[1];
@@ -70,10 +93,12 @@ class GameCubit extends Cubit<GameState> {
       message.add("Pest muss trinken!");
     }
 
-    if (message.isEmpty) {
-      message.add("Weitergeben");
-    }
-
     return message;
+  }
+
+  @override
+  void onChange(Change<GameState> change) {
+    print("${change.nextState}: ${change.nextState.dices}");
+    super.onChange(change);
   }
 }

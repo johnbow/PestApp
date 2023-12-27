@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pest/cubit/game_cubit.dart';
-import 'package:pest/pages/one_dice_page.dart';
+import 'package:pest/pages/main_page.dart';
 import 'package:pest/repositories/dice_repository.dart';
 import 'package:pest/repositories/random_dice.dart';
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 GameCubit(diceRepo: context.read<DiceRepository>()),
-            child: const OneDicePage(),
+            child: const MainPage(),
           ),
         ));
   }
