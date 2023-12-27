@@ -10,7 +10,17 @@ class GameCubit extends Cubit<GameState> {
 
   final DiceRepository diceRepo;
 
-  void addPlayer() => emit(state.copyWith(players: state.players + 1));
+  void addPlayer() {
+    if (state is RoundEnded) {
+      emit(RoundStarted(
+          players: state.players + 1,
+          dices: state.dices,
+          round: state.players + 1,
+          message: const ["Weitergeben"]));
+      return;
+    }
+    emit(state.copyWith(players: state.players + 1));
+  }
 
   void removePlayer() {
     if (state.players <= 1) return;
