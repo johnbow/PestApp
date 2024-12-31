@@ -20,7 +20,7 @@ class SecondStagePage extends StatelessWidget {
           NextStageDisplay(
               actionText: Text(
             "Neues Spiel",
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: Theme.of(context).textTheme.headlineMedium,
           ))
         else
           const DiceDisplay(),

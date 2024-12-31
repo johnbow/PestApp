@@ -14,31 +14,44 @@ class DiceDisplay extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          const Gap(12.0),
+          const Gap(24.0),
           SizedBox(
             height: 80,
             child: BlocBuilder<DiceCubit, DiceState>(
               builder: (context, state) {
-                return switch (state) {
-                  DiceRolled() => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (final line in state.message)
-                          Text(
-                            line,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                      ],
-                    ),
-                  DiceRolling() => const Text("")
-                };
+                return MessageDisplay(state: state);
               },
             ),
           ),
           const Expanded(child: DiceWidgetGroup()),
         ],
       ),
+    );
+  }
+}
+
+class MessageDisplay extends StatelessWidget {
+  const MessageDisplay({super.key, required this.state});
+
+  final DiceState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final message = switch (state) {
+      DiceInitial s => s.message,
+      DiceRolled s => s.message,
+      DiceRolling() => [""],
+    };
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final line in message)
+          Text(
+            line,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+      ],
     );
   }
 }

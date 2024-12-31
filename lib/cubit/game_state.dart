@@ -13,26 +13,28 @@ sealed class GameState {
 }
 
 class FirstStage extends GameState {
-  const FirstStage({required super.players});
+  const FirstStage({required super.players, super.round});
 
   @override
   int get numDice => 1;
 
   @override
   FirstStage copyWith({int? players, int? round}) {
-    return FirstStage(players: players ?? this.players);
+    return FirstStage(
+        players: players ?? this.players, round: round ?? this.round);
   }
 }
 
 class FirstStageEnded extends GameState {
-  const FirstStageEnded({required super.players});
+  const FirstStageEnded({required super.players, super.round});
 
   @override
   int get numDice => 1;
 
   @override
   FirstStageEnded copyWith({int? players, int? round}) {
-    return FirstStageEnded(players: players ?? this.players);
+    return FirstStageEnded(
+        players: players ?? this.players, round: round ?? this.round);
   }
 }
 

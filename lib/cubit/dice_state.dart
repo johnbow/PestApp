@@ -10,6 +10,12 @@ sealed class DiceState extends Equatable {
   List<Object> get props => [roll];
 }
 
+final class DiceInitial extends DiceState {
+  const DiceInitial({required super.roll, required this.message});
+
+  final List<String> message;
+}
+
 final class DiceRolled extends DiceState {
   const DiceRolled({required super.roll, required this.message});
 

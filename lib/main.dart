@@ -5,6 +5,7 @@ import 'package:pest/constants/themes.dart';
 import 'package:pest/cubit/dice_animation_cubit.dart';
 import 'package:pest/cubit/dice_cubit.dart';
 import 'package:pest/cubit/game_cubit.dart';
+import 'package:pest/cubit/settings_cubit.dart';
 import 'package:pest/pages/main_page.dart';
 import 'package:pest/repositories/dice_repository.dart';
 import 'package:pest/repositories/image_repository.dart';
@@ -45,8 +46,7 @@ class MyApp extends StatelessWidget {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) =>
-                    GameCubit(diceRepo: context.read<DiceRepository>()),
+                create: (context) => GameCubit(),
               ),
               BlocProvider(
                 create: (context) => DiceAnimationCubit(
@@ -55,6 +55,9 @@ class MyApp extends StatelessWidget {
               BlocProvider(
                 create: (context) =>
                     DiceCubit(diceRepo: context.read<DiceRepository>()),
+              ),
+              BlocProvider(
+                create: (context) => SettingsCubit(),
               ),
             ],
             child: const MainPage(),

@@ -7,18 +7,18 @@ part 'dice_state.dart';
 
 class DiceCubit extends Cubit<DiceState> {
   DiceCubit({required this.diceRepo})
-      : super(DiceRolled(
+      : super(DiceInitial(
             roll: diceRepo.firstInitial, message: const ["Pest auswürfeln"]));
 
   final DiceRepository diceRepo;
 
   void resetFirst() {
-    emit(DiceRolled(
+    emit(DiceInitial(
         roll: diceRepo.firstInitial, message: const ["Pest auswürfeln"]));
   }
 
   void resetSecond() {
-    emit(DiceRolled(
+    emit(DiceInitial(
         roll: diceRepo.secondInitial,
         message: const ["Linker Nachbar der", "Pest fängt an"]));
   }
@@ -30,6 +30,7 @@ class DiceCubit extends Cubit<DiceState> {
   }
 
   void notifyRollFinished() {
+    if (state is! DiceRolling) return;
     final message = state.roll.length == 1
         ? ["Pest auswürfeln"]
         : _doubleRollMessage(state.roll);
@@ -41,7 +42,8 @@ List<String> _doubleRollMessage(List<int> roll) {
   List<String> message = [];
 
   if (listEquals(roll, [3, 1]) || listEquals(roll, [1, 3])) {
-    message.add("Pest muss exen!");
+    message.add("Pest muss");
+    message.add("EXEN");
     return message;
   }
 

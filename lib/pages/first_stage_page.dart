@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pest/cubit/game_cubit.dart';
+import 'package:pest/pages/settings_dialog.dart';
+import 'package:pest/widgets/bottom_bar.dart';
 import 'package:pest/widgets/dice_display.dart';
 import 'package:pest/widgets/next_stage_display.dart';
 import 'package:pest/widgets/player_counter.dart';
@@ -24,6 +26,7 @@ class FirstStagePage extends StatelessWidget {
           )
         else
           const DiceDisplay(),
+        const BottomBar(),
       ],
     );
   }

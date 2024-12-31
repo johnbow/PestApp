@@ -16,10 +16,11 @@ class PlayerCounter extends StatelessWidget {
               if (context.read<DiceCubit>().state is DiceRolling) return;
               context.read<GameCubit>().removePlayer();
             },
-            icon: const Icon(Icons.remove)),
+            icon: const Icon(Icons.remove, size: 30.0)),
         BlocBuilder<GameCubit, GameState>(
           builder: (context, state) {
-            return Text("${state.players} Spieler");
+            return Text("${state.players} Spieler",
+                style: Theme.of(context).textTheme.titleLarge);
           },
         ),
         IconButton(
@@ -27,7 +28,7 @@ class PlayerCounter extends StatelessWidget {
               if (context.read<DiceCubit>().state is DiceRolling) return;
               context.read<GameCubit>().addPlayer();
             },
-            icon: const Icon(Icons.add))
+            icon: const Icon(Icons.add, size: 30.0))
       ],
     );
   }
