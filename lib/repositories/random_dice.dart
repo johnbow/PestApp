@@ -4,7 +4,10 @@ import 'dart:math';
 import 'package:pest/repositories/dice_repository.dart';
 
 class RandomDice extends DiceRepository {
-  RandomDice({required super.sides, required super.initial});
+  RandomDice(
+      {required super.sides,
+      required super.firstInitial,
+      required super.secondInitial});
 
   final rng = Random();
 

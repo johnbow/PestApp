@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pest/cubit/dice_cubit.dart';
 import 'package:pest/cubit/game_cubit.dart';
 
 class PlayerCounter extends StatelessWidget {
-  const PlayerCounter({super.key, required this.playerCount});
-
-  final int playerCount;
+  const PlayerCounter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +12,21 @@ class PlayerCounter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-            onPressed: () => context.read<GameCubit>().removePlayer(),
+            onPressed: () {
+              if (context.read<DiceCubit>().state is DiceRolling) return;
+              context.read<GameCubit>().removePlayer();
+            },
             icon: const Icon(Icons.remove)),
-        Text("$playerCount Spieler"),
+        BlocBuilder<GameCubit, GameState>(
+          builder: (context, state) {
+            return Text("${state.players} Spieler");
+          },
+        ),
         IconButton(
-            onPressed: () => context.read<GameCubit>().addPlayer(),
+            onPressed: () {
+              if (context.read<DiceCubit>().state is DiceRolling) return;
+              context.read<GameCubit>().addPlayer();
+            },
             icon: const Icon(Icons.add))
       ],
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pest/constants/themes.dart';
 import 'package:pest/cubit/dice_animation_cubit.dart';
+import 'package:pest/cubit/dice_cubit.dart';
 import 'package:pest/cubit/game_cubit.dart';
 import 'package:pest/pages/main_page.dart';
 import 'package:pest/repositories/dice_repository.dart';
@@ -25,15 +27,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: const ColorScheme.dark(
-              brightness: Brightness.light, background: Color(0xFF282828)),
+          colorScheme: colorScheme,
           textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 18)),
           useMaterial3: true,
         ),
         home: MultiRepositoryProvider(
           providers: [
             RepositoryProvider<DiceRepository>(
-              create: (context) => RandomDice(sides: 6, initial: [6]),
+              create: (context) => RandomDice(
+                  sides: 6, firstInitial: [6], secondInitial: [6, 6]),
             ),
             RepositoryProvider(
               lazy: false,
@@ -49,6 +51,10 @@ class MyApp extends StatelessWidget {
               BlocProvider(
                 create: (context) => DiceAnimationCubit(
                     diceRepo: context.read<DiceRepository>()),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    DiceCubit(diceRepo: context.read<DiceRepository>()),
               ),
             ],
             child: const MainPage(),

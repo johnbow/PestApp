@@ -1,12 +1,14 @@
 import 'dart:async';
 
 abstract class DiceRepository {
-  DiceRepository({required this.sides, required List<int> initial})
-      : last = initial;
+  DiceRepository(
+      {required this.sides,
+      required this.firstInitial,
+      required this.secondInitial});
 
   final int sides;
-
-  List<int> last;
+  final List<int> firstInitial;
+  final List<int> secondInitial;
 
   FutureOr<int> get nextNumber;
 
@@ -15,7 +17,6 @@ abstract class DiceRepository {
     for (int i = 0; i < numbers.length; i++) {
       numbers[i] = await nextNumber;
     }
-    last = numbers;
     return numbers;
   }
 }
