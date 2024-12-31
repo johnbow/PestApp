@@ -2,18 +2,21 @@ part of 'game_cubit.dart';
 
 @immutable
 sealed class GameState {
-  const GameState(
-      {required this.players, required this.numDice, this.round = 1});
+  const GameState({required this.players, this.round = 1});
 
   final int players;
-  final int numDice;
   final int round;
+
+  int get numDice;
 
   GameState copyWith({int? players, int? round});
 }
 
 class FirstStage extends GameState {
-  const FirstStage({required super.players}) : super(numDice: 1);
+  const FirstStage({required super.players});
+
+  @override
+  int get numDice => 1;
 
   @override
   FirstStage copyWith({int? players, int? round}) {
@@ -22,7 +25,10 @@ class FirstStage extends GameState {
 }
 
 class FirstStageEnded extends GameState {
-  const FirstStageEnded({required super.players}) : super(numDice: 1);
+  const FirstStageEnded({required super.players});
+
+  @override
+  int get numDice => 1;
 
   @override
   FirstStageEnded copyWith({int? players, int? round}) {
@@ -31,7 +37,10 @@ class FirstStageEnded extends GameState {
 }
 
 class SecondStage extends GameState {
-  const SecondStage({required super.players, super.round}) : super(numDice: 2);
+  const SecondStage({required super.players, super.round});
+
+  @override
+  int get numDice => 2;
 
   @override
   SecondStage copyWith({int? players, int? round}) {
@@ -41,8 +50,10 @@ class SecondStage extends GameState {
 }
 
 class SecondStageEnded extends GameState {
-  const SecondStageEnded({required super.players})
-      : super(numDice: 2, round: players);
+  const SecondStageEnded({required super.players}) : super(round: players);
+
+  @override
+  int get numDice => 2;
 
   @override
   SecondStageEnded copyWith({int? players, int? round}) {
