@@ -35,7 +35,11 @@ class DiceWidgetGroup extends StatelessWidget {
         behavior: HitTestBehavior.translucent,
         onTap: () => {
           if (gameState is FirstStage || gameState is SecondStage)
-            {context.read<DiceCubit>().rollDice(gameState.numDice)}
+            {
+              context
+                  .read<DiceCubit>()
+                  .rollDice(gameState.numDice, gameState.round)
+            }
         },
         child: BlocBuilder<DiceAnimationCubit, DiceAnimationState>(
           builder: (context, state) {

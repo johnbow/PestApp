@@ -2,10 +2,10 @@ part of 'settings_cubit.dart';
 
 final class SettingsState extends Equatable {
   const SettingsState(
-      {this.noConsecutivePest = false,
-      this.expressRound = false,
-      this.showAnimations = true,
-      this.animationFrameDurationMs = 300});
+      {required this.noConsecutivePest,
+      required this.expressRound,
+      required this.showAnimations,
+      required this.animationFrameDurationMs});
 
   final bool noConsecutivePest;
   final bool expressRound;

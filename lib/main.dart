@@ -10,6 +10,7 @@ import 'package:pest/pages/main_page.dart';
 import 'package:pest/repositories/dice_repository.dart';
 import 'package:pest/repositories/image_repository.dart';
 import 'package:pest/repositories/random_dice.dart';
+import 'package:pest/repositories/settings_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,22 +43,27 @@ class MyApp extends StatelessWidget {
               lazy: false,
               create: (context) => DiceImageRepository(sides: 6),
             ),
+            RepositoryProvider(
+              lazy: false,
+              create: (context) => Settings(),
+            ),
           ],
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => GameCubit(),
+                create: (context) => GameCubit(context.read<Settings>()),
               ),
               BlocProvider(
                 create: (context) => DiceAnimationCubit(
                     diceRepo: context.read<DiceRepository>()),
               ),
               BlocProvider(
-                create: (context) =>
-                    DiceCubit(diceRepo: context.read<DiceRepository>()),
+                create: (context) => DiceCubit(
+                    diceRepo: context.read<DiceRepository>(),
+                    settings: context.read<Settings>()),
               ),
               BlocProvider(
-                create: (context) => SettingsCubit(),
+                create: (context) => SettingsCubit(context.read<Settings>()),
               ),
             ],
             child: const MainPage(),

@@ -53,7 +53,10 @@ class SettingsDialog extends StatelessWidget {
               Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        settings.save();
+                        Navigator.of(context).pop();
+                      },
                       child: const Text("Schließen")))
             ],
           );

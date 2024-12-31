@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pest/repositories/settings_repository.dart';
 
 part 'game_state.dart';
 
 class GameCubit extends Cubit<GameState> {
-  GameCubit() : super(const FirstStage(players: 1));
+  GameCubit(this.settings) : super(const FirstStage(players: 1));
+
+  final Settings settings;
 
   static const unoccupiedList = [
     [4, 1],
@@ -22,16 +25,19 @@ class GameCubit extends Cubit<GameState> {
   ];
 
   void addPlayer() {
+    // TODO handle no consecutive
     emit(state.copyWith(players: state.players + 1));
   }
 
   void removePlayer() {
+    // TODO handle no consecutive
     if (state.players <= 1) return;
     final newRound = max(1, state.round - 1);
     emit(state.copyWith(players: state.players - 1, round: newRound));
   }
 
   void restart() {
+    settings.lastPest = null;
     emit(FirstStage(players: state.players, round: 1));
   }
 
@@ -75,7 +81,8 @@ class GameCubit extends Cubit<GameState> {
         emit(SecondStageEnded(players: state.players));
         break;
       case SecondStageEnded():
-        restart();
+        settings.lastPest = state.players;
+        emit(FirstStage(players: state.players, round: 1));
         break;
     }
   }
