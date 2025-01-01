@@ -11,19 +11,6 @@ class GameCubit extends Cubit<GameState> {
 
   final Settings settings;
 
-  static const unoccupiedList = [
-    [4, 1],
-    [1, 4],
-    [4, 2],
-    [2, 4],
-    [5, 1],
-    [1, 5],
-    [6, 4],
-    [4, 6],
-    [6, 5],
-    [5, 6]
-  ];
-
   void addPlayer() {
     if (settings.lastPest != null) {
       settings.lastPest = settings.lastPest! + 1;
@@ -47,10 +34,17 @@ class GameCubit extends Cubit<GameState> {
 
   /// Checks if double dice roll fits criteria for next player to play.
   bool _nextPlayersTurn(List<int> roll) {
-    for (final entry in unoccupiedList) {
-      if (listEquals(entry, roll)) return true;
+    switch (settings.passingBehavior) {
+      case PassingBehavior.afterPestDoesNotDrink:
+        return !(roll.contains(3) || roll[0] + roll[1] == 3);
+      case PassingBehavior.afterNoDrinking:
+        for (final entry in noDrinkingRolls) {
+          if (listEquals(entry, roll)) return true;
+        }
+        return false;
+      default:
+        return true; // includes PassingBehavior.immediate
     }
-    return false;
   }
 
   int _nextRound() {
@@ -91,3 +85,16 @@ class GameCubit extends Cubit<GameState> {
     }
   }
 }
+
+const noDrinkingRolls = [
+  [4, 1],
+  [1, 4],
+  [4, 2],
+  [2, 4],
+  [5, 1],
+  [1, 5],
+  [6, 4],
+  [4, 6],
+  [6, 5],
+  [5, 6]
+];

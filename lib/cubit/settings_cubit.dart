@@ -9,8 +9,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       : super(SettingsState(
             noConsecutivePest: settings.noConsecutivePest,
             showAnimations: settings.showAnimations,
-            expressRound: settings.expressRound,
-            animationFrameDurationMs: settings.animationFrameDurationMs));
+            passingBehavior: settings.passingBehavior));
 
   final Settings settings;
 
@@ -22,10 +21,13 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(showAnimations: value));
   }
 
+  void setPassingBehavior(int value) {
+    emit(state.copyWith(passingBehavior: value));
+  }
+
   void save() {
     settings.noConsecutivePest = state.noConsecutivePest;
     settings.showAnimations = state.showAnimations;
-    settings.expressRound = state.expressRound;
-    settings.animationFrameDurationMs = state.animationFrameDurationMs;
+    settings.passingBehavior = state.passingBehavior;
   }
 }

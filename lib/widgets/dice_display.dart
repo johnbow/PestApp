@@ -15,8 +15,8 @@ class DiceDisplay extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           const Gap(24.0),
-          SizedBox(
-            height: 80,
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 80),
             child: BlocBuilder<DiceCubit, DiceState>(
               builder: (context, state) {
                 return MessageDisplay(state: state);

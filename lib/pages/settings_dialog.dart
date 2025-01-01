@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:pest/cubit/settings_cubit.dart';
+import 'package:pest/repositories/settings_repository.dart';
 
 Future<void> openSettings(BuildContext context) async {
   await showDialog(
@@ -42,7 +43,7 @@ class SettingsDialog extends StatelessWidget {
                       softWrap: true,
                     ),
                   ),
-                  const Gap(12.0),
+                  const Gap(10.0),
                   Checkbox(
                       value: settings.state.noConsecutivePest,
                       onChanged: (newValue) =>
@@ -59,11 +60,35 @@ class SettingsDialog extends StatelessWidget {
                       softWrap: true,
                     ),
                   ),
-                  const Gap(12.0),
+                  const Gap(10.0),
                   Checkbox(
                       value: settings.state.showAnimations,
                       onChanged: (newValue) =>
                           settings.setShowAnimations(newValue!))
+                ],
+              ),
+              const Gap(3.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DropdownMenu<int>(
+                    helperText: "Weitergeben nach",
+                    initialSelection: settings.state.passingBehavior,
+                    onSelected: (value) => settings.setPassingBehavior(value!),
+                    requestFocusOnTap: false,
+                    inputDecorationTheme: const InputDecorationTheme(
+                        border: UnderlineInputBorder()),
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(
+                          value: PassingBehavior.afterNoDrinking,
+                          label: "Keiner trinkt"),
+                      DropdownMenuEntry(
+                          value: PassingBehavior.afterPestDoesNotDrink,
+                          label: "Pest trinkt nicht"),
+                      DropdownMenuEntry(
+                          value: PassingBehavior.immediate, label: "Sofort"),
+                    ],
+                  )
                 ],
               ),
               const Gap(20.0),

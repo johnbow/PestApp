@@ -3,33 +3,22 @@ part of 'settings_cubit.dart';
 final class SettingsState extends Equatable {
   const SettingsState(
       {required this.noConsecutivePest,
-      required this.expressRound,
       required this.showAnimations,
-      required this.animationFrameDurationMs});
+      required this.passingBehavior});
 
   final bool noConsecutivePest;
-  final bool expressRound;
   final bool showAnimations;
-  final int animationFrameDurationMs;
+  final int passingBehavior;
 
   @override
-  List<Object> get props => [
-        noConsecutivePest,
-        expressRound,
-        showAnimations,
-        animationFrameDurationMs
-      ];
+  List<Object> get props =>
+      [noConsecutivePest, showAnimations, passingBehavior];
 
   SettingsState copyWith(
-      {bool? noConsecutivePest,
-      bool? expressRound,
-      bool? showAnimations,
-      int? animationFrameDurationMs}) {
+      {bool? noConsecutivePest, bool? showAnimations, int? passingBehavior}) {
     return SettingsState(
         noConsecutivePest: noConsecutivePest ?? this.noConsecutivePest,
-        expressRound: expressRound ?? this.expressRound,
         showAnimations: showAnimations ?? this.showAnimations,
-        animationFrameDurationMs:
-            animationFrameDurationMs ?? this.animationFrameDurationMs);
+        passingBehavior: passingBehavior ?? this.passingBehavior);
   }
 }
