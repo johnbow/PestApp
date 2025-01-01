@@ -49,6 +49,23 @@ class SettingsDialog extends StatelessWidget {
                           settings.setNoConsecutivePest(newValue!))
                 ],
               ),
+              const Gap(5.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Animationen zeigen: ",
+                      softWrap: true,
+                    ),
+                  ),
+                  const Gap(12.0),
+                  Checkbox(
+                      value: settings.state.showAnimations,
+                      onChanged: (newValue) =>
+                          settings.setShowAnimations(newValue!))
+                ],
+              ),
               const Gap(20.0),
               Align(
                   alignment: Alignment.center,

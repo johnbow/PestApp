@@ -55,7 +55,8 @@ class MyApp extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) => DiceAnimationCubit(
-                    diceRepo: context.read<DiceRepository>()),
+                    diceRepo: context.read<DiceRepository>(),
+                    settings: context.read<Settings>()),
               ),
               BlocProvider(
                 create: (context) => DiceCubit(

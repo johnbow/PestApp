@@ -4,14 +4,17 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pest/repositories/dice_repository.dart';
+import 'package:pest/repositories/settings_repository.dart';
 
 part 'dice_animation_state.dart';
 
 class DiceAnimationCubit extends Cubit<DiceAnimationState> {
-  DiceAnimationCubit({required this.diceRepo})
+  DiceAnimationCubit({required this.diceRepo, required this.settings})
       : super(DiceAnimationFinished(frame: diceRepo.firstInitial));
 
   final DiceRepository diceRepo;
+  final Settings settings;
+
   final rng = Random();
   static const animationFrameDuration = Duration(milliseconds: 300);
   static const animationFramesRange = [4, 8]; // inclusive, inclusive
@@ -25,6 +28,10 @@ class DiceAnimationCubit extends Cubit<DiceAnimationState> {
   }
 
   Future<void> startAnimation(List<int> roll) async {
+    if (!settings.showAnimations) {
+      emit(DiceAnimationFinished(frame: roll));
+      return;
+    }
     final diff = animationFramesRange[1] - animationFramesRange[0];
     final frameCount = animationFramesRange[0] + rng.nextInt(diff);
     final frames = [await _generateIntermediateRoll(roll)];

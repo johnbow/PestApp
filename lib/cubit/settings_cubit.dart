@@ -18,7 +18,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(noConsecutivePest: value));
   }
 
-  void setShowDiceAnimations(bool value) {
+  void setShowAnimations(bool value) {
     emit(state.copyWith(showAnimations: value));
   }
 
