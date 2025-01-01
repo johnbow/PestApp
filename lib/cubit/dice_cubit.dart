@@ -66,17 +66,16 @@ class DiceCubit extends Cubit<DiceState> {
           .add("Verteile ${roll[0]} ${roll[0] == 1 ? "Schluck" : "Schlücke"}");
     }
 
-    final eyesum = roll[0] + roll[1];
-    switch (eyesum) {
+    switch (roll[0] + roll[1]) {
       case 3:
         message.add("Pest muss trinken!");
       case 7:
         message.add("Alle an die Nase fassen!");
         message.add("Letzter trinkt einen Schluck");
       case 8:
-        message.add("Linker Nachbar trinkt!");
+        message.add("Linker Nachbar trinkt");
       case 9:
-        message.add("Rechter Nachbar trinkt!");
+        message.add("Rechter Nachbar trinkt");
     }
 
     if (roll[0] == 3 && roll[1] == 3) {
@@ -85,18 +84,14 @@ class DiceCubit extends Cubit<DiceState> {
       message.add("Pest muss trinken!");
     }
 
-    switch (settings.passingBehavior) {
-      case PassingBehavior.afterPestDoesNotDrink:
-        if (!(roll.contains(3) || roll[0] + roll[1] == 3)) {
-          message.add("Weitergeben");
-        }
-      case PassingBehavior.afterNoDrinking:
-        if (message.isEmpty) {
-          message.add("Weitergeben");
-        }
-      default:
-        message.add("Weitergeben");
-    }
+    final pass = switch (settings.passingBehavior) {
+      PassingBehavior.afterPestDoesNotDrink =>
+        !(roll.contains(3) || roll[0] + roll[1] == 3),
+      PassingBehavior.afterNoDrinking => message.isEmpty,
+      _ => true
+    };
+
+    if (pass) message.add("Weitergeben");
 
     return message;
   }
@@ -105,7 +100,7 @@ class DiceCubit extends Cubit<DiceState> {
     List<String> message = [];
 
     if (listEquals(roll, [3, 1]) || listEquals(roll, [1, 3])) {
-      message.add("Pest trinkt 5 Schlücke!");
+      message.add("Pest trinkt 7 Schlücke!");
       return message;
     }
 
@@ -115,17 +110,16 @@ class DiceCubit extends Cubit<DiceState> {
       message.add("Verteile ${2 * roll[0]} Schlücke");
     }
 
-    final eyesum = roll[0] + roll[1];
-    switch (eyesum) {
+    switch (roll[0] + roll[1]) {
       case 3:
         message.add("Pest muss trinken!");
       case 7:
         message.add("Alle an die Nase fassen!");
         message.add("Letzter trinkt 3 Schlücke");
       case 8:
-        message.add("Linker Nachbar trinkt!");
+        message.add("Linker Nachbar trinkt");
       case 9:
-        message.add("Rechter Nachbar trinkt!");
+        message.add("Rechter Nachbar trinkt");
     }
 
     if (roll[0] == 3 && roll[1] == 3) {
@@ -134,18 +128,16 @@ class DiceCubit extends Cubit<DiceState> {
       message.add("Pest muss trinken!");
     }
 
-    switch (settings.passingBehavior) {
-      case PassingBehavior.afterPestDoesNotDrink:
-        if (!(roll.contains(3) || roll[0] + roll[1] == 3)) {
-          message.add("Weitergeben");
-        }
-      case PassingBehavior.afterNoDrinking:
-        if (message.isEmpty) {
-          message.add("Weitergeben");
-        }
-      default:
-        message.add("Weitergeben");
-    }
+    final pass = switch (settings.passingBehavior) {
+      PassingBehavior.afterPestDoesNotDrink =>
+        !(roll.contains(3) || roll[0] + roll[1] == 3),
+      PassingBehavior.afterNoDrinking => message.isEmpty,
+      _ => true
+    };
+
+    if (message.isEmpty) message.add("Trink selbst 5 Schlücke!");
+
+    if (pass) message.add("Weitergeben");
 
     return message;
   }

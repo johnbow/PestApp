@@ -49,7 +49,8 @@ class MessageDisplay extends StatelessWidget {
           Text(
             line,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                color: line == "Weitergeben" ? Colors.lightGreen : null),
           ),
       ],
     );

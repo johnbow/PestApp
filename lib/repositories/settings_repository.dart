@@ -3,7 +3,7 @@ class Settings {
   bool showAnimations;
   bool bigGroupSetting;
   int passingBehavior;
-  int? lastPest;
+  int? lastPest; // just keep track of this
 
   Settings(
       {this.noConsecutivePest = false,
@@ -11,6 +11,13 @@ class Settings {
       this.passingBehavior = PassingBehavior.afterNoDrinking,
       this.lastPest,
       this.bigGroupSetting = false});
+
+  void reset() {
+    noConsecutivePest = false;
+    showAnimations = true;
+    passingBehavior = PassingBehavior.afterNoDrinking;
+    bigGroupSetting = false;
+  }
 }
 
 class PassingBehavior {

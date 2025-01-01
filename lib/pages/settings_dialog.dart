@@ -109,14 +109,18 @@ class SettingsDialog extends StatelessWidget {
                 ],
               ),
               const Gap(20.0),
-              Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        settings.save();
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("Schließen")))
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                ElevatedButton(
+                    onPressed: settings.reset,
+                    child: const Text("Zurücksetzen")),
+                const Gap(10.0),
+                ElevatedButton(
+                    onPressed: () {
+                      settings.save();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Schließen")),
+              ])
             ],
           );
         },

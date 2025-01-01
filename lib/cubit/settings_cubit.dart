@@ -5,12 +5,7 @@ import 'package:pest/repositories/settings_repository.dart';
 part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
-  SettingsCubit(this.settings)
-      : super(SettingsState(
-            noConsecutivePest: settings.noConsecutivePest,
-            showAnimations: settings.showAnimations,
-            passingBehavior: settings.passingBehavior,
-            bigGroupSetting: settings.bigGroupSetting));
+  SettingsCubit(this.settings) : super(SettingsState.from(settings));
 
   final Settings settings;
 
@@ -32,6 +27,11 @@ class SettingsCubit extends Cubit<SettingsState> {
     final ncp = value ? true : state.noConsecutivePest;
     emit(state.copyWith(
         bigGroupSetting: value, passingBehavior: pb, noConsecutivePest: ncp));
+  }
+
+  void reset() {
+    settings.reset();
+    emit(SettingsState.from(settings));
   }
 
   void save() {

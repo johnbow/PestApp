@@ -7,6 +7,12 @@ final class SettingsState extends Equatable {
       required this.passingBehavior,
       required this.bigGroupSetting});
 
+  SettingsState.from(Settings settings)
+      : noConsecutivePest = settings.noConsecutivePest,
+        showAnimations = settings.showAnimations,
+        passingBehavior = settings.passingBehavior,
+        bigGroupSetting = settings.bigGroupSetting;
+
   final bool noConsecutivePest;
   final bool showAnimations;
   final bool bigGroupSetting;
