@@ -20,14 +20,10 @@ class MainPage extends StatelessWidget {
             case FirstStage():
               context.read<DiceCubit>().resetFirst();
               context.read<DiceAnimationCubit>().resetFirst();
-              break;
-            case FirstStageEnded():
-              break;
             case SecondStage():
               context.read<DiceCubit>().resetSecond();
               context.read<DiceAnimationCubit>().resetSecond();
-              break;
-            case SecondStageEnded():
+            default:
               break;
           }
         },

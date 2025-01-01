@@ -39,7 +39,9 @@ class DiceCubit extends Cubit<DiceState> {
     if (state is! DiceRolling) return;
     final message = state.roll.length == 1
         ? ["Pest auswürfeln"]
-        : _doubleRollMessage(state.roll);
+        : (settings.bigGroupSetting
+            ? _doubleRollMessageBigGroup(state.roll)
+            : _doubleRollMessage(state.roll));
     emit(DiceRolled(roll: state.roll, message: message));
   }
 
@@ -70,6 +72,7 @@ class DiceCubit extends Cubit<DiceState> {
         message.add("Pest muss trinken!");
       case 7:
         message.add("Alle an die Nase fassen!");
+        message.add("Letzter trinkt einen Schluck");
       case 8:
         message.add("Linker Nachbar trinkt!");
       case 9:
@@ -87,15 +90,61 @@ class DiceCubit extends Cubit<DiceState> {
         if (!(roll.contains(3) || roll[0] + roll[1] == 3)) {
           message.add("Weitergeben");
         }
-        break;
       case PassingBehavior.afterNoDrinking:
         if (message.isEmpty) {
           message.add("Weitergeben");
         }
-        break;
       default:
         message.add("Weitergeben");
-        break;
+    }
+
+    return message;
+  }
+
+  List<String> _doubleRollMessageBigGroup(List<int> roll) {
+    List<String> message = [];
+
+    if (listEquals(roll, [3, 1]) || listEquals(roll, [1, 3])) {
+      message.add("Pest trinkt 5 Schlücke!");
+      return message;
+    }
+
+    if (listEquals(roll, [1, 1])) {
+      message.add("Alle trinken einen Schluck!");
+    } else if (roll[0] == roll[1]) {
+      message.add("Verteile ${2 * roll[0]} Schlücke");
+    }
+
+    final eyesum = roll[0] + roll[1];
+    switch (eyesum) {
+      case 3:
+        message.add("Pest muss trinken!");
+      case 7:
+        message.add("Alle an die Nase fassen!");
+        message.add("Letzter trinkt 3 Schlücke");
+      case 8:
+        message.add("Linker Nachbar trinkt!");
+      case 9:
+        message.add("Rechter Nachbar trinkt!");
+    }
+
+    if (roll[0] == 3 && roll[1] == 3) {
+      message.add("Pest muss doppelt trinken!");
+    } else if (roll[0] == 3 || roll[1] == 3) {
+      message.add("Pest muss trinken!");
+    }
+
+    switch (settings.passingBehavior) {
+      case PassingBehavior.afterPestDoesNotDrink:
+        if (!(roll.contains(3) || roll[0] + roll[1] == 3)) {
+          message.add("Weitergeben");
+        }
+      case PassingBehavior.afterNoDrinking:
+        if (message.isEmpty) {
+          message.add("Weitergeben");
+        }
+      default:
+        message.add("Weitergeben");
     }
 
     return message;

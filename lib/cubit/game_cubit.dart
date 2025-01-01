@@ -71,17 +71,13 @@ class GameCubit extends Cubit<GameState> {
     switch (state) {
       case FirstStage():
         emit(FirstStageEnded(players: state.players, round: state.round));
-        break;
       case FirstStageEnded():
         emit(SecondStage(players: state.players, round: 1));
-        break;
       case SecondStage():
         emit(SecondStageEnded(players: state.players));
-        break;
       case SecondStageEnded():
         settings.lastPest = state.players;
         emit(FirstStage(players: state.players, round: 1));
-        break;
     }
   }
 }

@@ -45,7 +45,7 @@ class SettingsDialog extends StatelessWidget {
                   ),
                   const Gap(10.0),
                   Checkbox(
-                      value: settings.state.noConsecutivePest,
+                      value: state.noConsecutivePest,
                       onChanged: (newValue) =>
                           settings.setNoConsecutivePest(newValue!))
                 ],
@@ -62,9 +62,26 @@ class SettingsDialog extends StatelessWidget {
                   ),
                   const Gap(10.0),
                   Checkbox(
-                      value: settings.state.showAnimations,
+                      value: state.showAnimations,
                       onChanged: (newValue) =>
                           settings.setShowAnimations(newValue!))
+                ],
+              ),
+              const Gap(5.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Einstellung für große Gruppen: ",
+                      softWrap: true,
+                    ),
+                  ),
+                  const Gap(10.0),
+                  Checkbox(
+                      value: state.bigGroupSetting,
+                      onChanged: (newValue) =>
+                          settings.setBigGroupSetting(newValue!))
                 ],
               ),
               const Gap(3.0),
@@ -72,8 +89,8 @@ class SettingsDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   DropdownMenu<int>(
-                    helperText: "Weitergeben nach",
-                    initialSelection: settings.state.passingBehavior,
+                    helperText: "Weitergeben wenn",
+                    initialSelection: state.passingBehavior,
                     onSelected: (value) => settings.setPassingBehavior(value!),
                     requestFocusOnTap: false,
                     inputDecorationTheme: const InputDecorationTheme(
@@ -84,7 +101,7 @@ class SettingsDialog extends StatelessWidget {
                           label: "Keiner trinkt"),
                       DropdownMenuEntry(
                           value: PassingBehavior.afterPestDoesNotDrink,
-                          label: "Pest trinkt nicht"),
+                          label: "Pest nicht trinkt"),
                       DropdownMenuEntry(
                           value: PassingBehavior.immediate, label: "Sofort"),
                     ],
