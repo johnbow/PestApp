@@ -16,7 +16,8 @@ class DiceCubit extends Cubit<DiceState> {
 
   void resetFirst() {
     emit(DiceInitial(
-        roll: diceRepo.firstInitial, message: const ["Pest auswürfeln"]));
+        roll: diceRepo.firstInitial,
+        message: const ["Linker Nachbar der", "Pest fängt an"]));
   }
 
   void resetSecond() {
@@ -29,7 +30,6 @@ class DiceCubit extends Cubit<DiceState> {
     if (state is DiceRolling) return;
     List<int> roll = await diceRepo.getNumbers(num);
     while (num == 1 && roll[0] == 3 && _checkNoConsecutivePest(round)) {
-      print("pest forfeited");
       roll = await diceRepo.getNumbers(num);
     }
     emit(DiceRolling(roll: roll));

@@ -25,13 +25,17 @@ class GameCubit extends Cubit<GameState> {
   ];
 
   void addPlayer() {
-    // TODO handle no consecutive
+    if (settings.lastPest != null) {
+      settings.lastPest = settings.lastPest! + 1;
+    }
     emit(state.copyWith(players: state.players + 1));
   }
 
   void removePlayer() {
-    // TODO handle no consecutive
     if (state.players <= 1) return;
+    if (settings.lastPest != null) {
+      settings.lastPest = settings.lastPest! - 1;
+    }
     final newRound = max(1, state.round - 1);
     emit(state.copyWith(players: state.players - 1, round: newRound));
   }

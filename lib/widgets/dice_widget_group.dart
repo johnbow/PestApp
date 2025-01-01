@@ -10,7 +10,7 @@ class DiceWidgetGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameState = context.read<GameCubit>().state;
+    final gameCubit = context.read<GameCubit>();
     return MultiBlocListener(
       listeners: [
         BlocListener<DiceCubit, DiceState>(
@@ -34,11 +34,11 @@ class DiceWidgetGroup extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => {
-          if (gameState is FirstStage || gameState is SecondStage)
+          if (gameCubit.state is FirstStage || gameCubit.state is SecondStage)
             {
               context
                   .read<DiceCubit>()
-                  .rollDice(gameState.numDice, gameState.round)
+                  .rollDice(gameCubit.state.numDice, gameCubit.state.round)
             }
         },
         child: BlocBuilder<DiceAnimationCubit, DiceAnimationState>(
