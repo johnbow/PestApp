@@ -1,3 +1,6 @@
+// pages have to be rebuild, so do not use const here
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pest/cubit/dice_animation_cubit.dart';
@@ -51,10 +54,10 @@ class MainPage extends StatelessWidget {
         child: BlocBuilder<GameCubit, GameState>(
           builder: (context, state) {
             return switch (state) {
-              FirstStage() => const FirstStagePage(),
-              FirstStageEnded() => const FirstStagePage(),
-              SecondStage() => const SecondStagePage(),
-              SecondStageEnded() => const SecondStagePage(),
+              FirstStage() => FirstStagePage(),
+              FirstStageEnded() => FirstStagePage(),
+              SecondStage() => SecondStagePage(),
+              SecondStageEnded() => SecondStagePage(),
             };
           },
         ),
