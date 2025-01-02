@@ -11,47 +11,28 @@ class DiceWidgetGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameCubit = context.read<GameCubit>();
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<DiceCubit, DiceState>(
-          listener: (context, state) {
-            if (state is DiceRolling) {
-              // tapped on dice
-              context.read<DiceAnimationCubit>().startAnimation(state.roll);
-            } else if (state is DiceRolled) {
-              context.read<GameCubit>().notifyRollFinished(state.roll);
-            }
-          },
-        ),
-        BlocListener<DiceAnimationCubit, DiceAnimationState>(
-          listener: (context, state) {
-            if (state is DiceAnimationFinished) {
-              context.read<DiceCubit>().notifyRollFinished();
-            }
-          },
-        ),
-      ],
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () => {
-          if (gameCubit.state is FirstStage || gameCubit.state is SecondStage)
-            {
-              context
-                  .read<DiceCubit>()
-                  .rollDice(gameCubit.state.numDice, gameCubit.state.round)
-            }
-        },
-        child: BlocBuilder<DiceAnimationCubit, DiceAnimationState>(
-          builder: (context, state) {
-            return Column(
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => {
+        if (gameCubit.state is FirstStage || gameCubit.state is SecondStage)
+          {
+            context
+                .read<DiceCubit>()
+                .rollDice(gameCubit.state.numDice, gameCubit.state.round)
+          }
+      },
+      child: BlocBuilder<DiceAnimationCubit, DiceAnimationState>(
+        builder: (context, state) {
+          return Center(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (final side in state.frame) DiceWidget(side: side)
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

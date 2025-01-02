@@ -20,6 +20,7 @@ class SettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.read<SettingsCubit>();
+    final labelStyle = Theme.of(context).textTheme.bodyMedium;
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: BlocBuilder<SettingsCubit, SettingsState>(
@@ -37,10 +38,11 @@ class SettingsDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       "Zweimal Pest hintereinander verbieten: ",
                       softWrap: true,
+                      style: labelStyle,
                     ),
                   ),
                   const Gap(10.0),
@@ -54,11 +56,9 @@ class SettingsDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
-                    child: Text(
-                      "Animationen zeigen: ",
-                      softWrap: true,
-                    ),
+                  Expanded(
+                    child: Text("Animationen zeigen: ",
+                        softWrap: true, style: labelStyle),
                   ),
                   const Gap(10.0),
                   Checkbox(
@@ -71,11 +71,9 @@ class SettingsDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
-                    child: Text(
-                      "Einstellung für große Gruppen: ",
-                      softWrap: true,
-                    ),
+                  Expanded(
+                    child: Text("Einstellung für große Gruppen: ",
+                        softWrap: true, style: labelStyle),
                   ),
                   const Gap(10.0),
                   Checkbox(
@@ -110,11 +108,13 @@ class SettingsDialog extends StatelessWidget {
               ),
               const Gap(20.0),
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                ElevatedButton(
+                TextButton(
                     onPressed: settings.reset,
-                    child: const Text("Zurücksetzen")),
-                const Gap(10.0),
-                ElevatedButton(
+                    child: Text("Zurücksetzen",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error))),
+                const Gap(5.0),
+                TextButton(
                     onPressed: () {
                       settings.save();
                       Navigator.of(context).pop();
