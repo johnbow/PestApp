@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pest/bridges/dice_animation_bridge.dart';
+import 'package:pest/bridges/game_animation_bridge.dart';
+import 'package:pest/bridges/game_dice_bridge.dart';
 import 'package:pest/constants/themes.dart';
 import 'package:pest/cubit/dice_animation_cubit.dart';
 import 'package:pest/cubit/dice_cubit.dart';
@@ -11,6 +14,7 @@ import 'package:pest/repositories/dice_repository.dart';
 import 'package:pest/repositories/image_repository.dart';
 import 'package:pest/repositories/random_dice.dart';
 import 'package:pest/repositories/settings_repository.dart';
+import 'package:pest/utils/bloc_bridge.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +71,14 @@ class MyApp extends StatelessWidget {
                 create: (context) => SettingsCubit(context.read<Settings>()),
               ),
             ],
-            child: const MainPage(),
+            child: BlocCommunicator(
+              bridges: [
+                DiceAnimationBridge(),
+                GameDiceBridge(),
+                GameAnimationBridge()
+              ],
+              child: const MainPage(),
+            ),
           ),
         ));
   }
